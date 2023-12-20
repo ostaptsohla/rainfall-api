@@ -23,9 +23,20 @@ namespace Rainfall_API.Services
         [HttpGet("/rainfall/id/{stationId}/readings")]
         public async Task<IActionResult> GetRainfallReadingsAsync([FromRoute] string stationId, [FromQuery, Range(1, 100)] int count = 10)
         {
-            var rainfallReadingResponse = await _rainfallReadingsService.GetRainfallReadingsAsync(stationId, count);
+            try
+            {
+                var rainfallReadingResponse = await _rainfallReadingsService.GetRainfallReadingsAsync(stationId, count);
+                if (rainfallReadingResponse.Readings.Count == 0)
+                {
+                    return BadRequest(new ErrorResponse() { Message = "No readings found for the specified stationId" });
+                }
 
-            return Ok(rainfallReadingResponse);
+                return Ok(rainfallReadingResponse);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal server error" });
+            }
         }
     }
 }
