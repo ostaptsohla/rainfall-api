@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using Rainfall_API.Models;
-using Rainfall_API.Services;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace Rainfall_API.Services
 {
@@ -18,6 +16,10 @@ namespace Rainfall_API.Services
             _rainfallReadingsService = rainfallReadingsService;
         }
 
+        [ProducesResponseType(typeof(RainfallReadingResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet("/rainfall/id/{stationId}/readings")]
         public async Task<IActionResult> GetRainfallReadingsAsync([FromRoute] string stationId, [FromQuery, Range(1, 100)] int count = 10)
         {
