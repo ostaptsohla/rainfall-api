@@ -28,7 +28,7 @@ namespace Rainfall_API.Services
                 var rainfallReadingResponse = await _rainfallReadingsService.GetRainfallReadingsAsync(stationId, count);
                 if (rainfallReadingResponse.Readings.Count == 0)
                 {
-                    return BadRequest(new ErrorResponse() { Message = "No readings found for the specified stationId" });
+                    return NotFound(new ErrorResponse() { Message = "No readings found for the specified stationId" });
                 }
 
                 return Ok(rainfallReadingResponse);
